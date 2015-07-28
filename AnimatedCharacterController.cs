@@ -35,7 +35,7 @@ public class AnimatedCharacterController : MonoBehaviour {
 			rigidbody2D.AddForce(Vector2.right * h * runForce);
 		}
 
-		if ((h > 0 && !facingRight) || (h < 0 && facingRight) {
+		if ((h > 0 && !facingRight) || (h < 0 && facingRight)) {
 			Flip();
 		}
 

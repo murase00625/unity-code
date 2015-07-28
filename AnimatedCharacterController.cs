@@ -4,6 +4,8 @@ using System.Collections;
 public class AnimatedCharacterController : MonoBehaviour {
 	private bool facingRight = true;
 	private bool isJumping = false;
+	// Flip this to true when the animation state machine is ready
+	private bool animated = false;
 
 	private Transform groundCheck;
 	private bool grounded = false;
@@ -15,7 +17,7 @@ public class AnimatedCharacterController : MonoBehaviour {
 
 	void Awake() {
 		groundCheck = transform.Find("groundCheck");
-		anim = GetComponent<Animator>();
+		if (animated) anim = GetComponent<Animator>();
 	}
 
 	void Update() {
@@ -29,7 +31,7 @@ public class AnimatedCharacterController : MonoBehaviour {
 	void FixedUpdate() {
 		float h = Input.GetAxis("Horizontal");
 
-		anim.SetFloat("Speed", Mathf.Abs(h));
+		if (animated) anim.SetFloat("Speed", Mathf.Abs(h));
 
 		if (h * rigidbody2D.velocity.x < maxRunSpeed) {
 			rigidbody2D.AddForce(Vector2.right * h * runForce);
@@ -40,7 +42,7 @@ public class AnimatedCharacterController : MonoBehaviour {
 		}
 
 		if (isJumping) {
-			anim.SetTrigger("Jump");
+			if (animated) anim.SetTrigger("Jump");
 
 			rigidbody2D.AddForce(new Vector2(0f, jumpForce));
 			isJumping = false;
@@ -49,7 +51,7 @@ public class AnimatedCharacterController : MonoBehaviour {
 		AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
 
 		if (stateInfo.IsName("Base Layer.jump")) {
-			if (grounded) {
+			if (grounded && animated) {
 				anim.SetTrigger("Touchground");
 			}
 		}

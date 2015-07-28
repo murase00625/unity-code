@@ -43,7 +43,7 @@ public class AnimatedCharacterController : MonoBehaviour {
 			anim.SetTrigger("Jump");
 
 			rigidbody2D.AddForce(new Vector2(0f, jumpForce));
-			jump = false;
+			isJumping = false;
 		}
 
 		AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);

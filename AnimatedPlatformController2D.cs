@@ -82,31 +82,31 @@ public class AnimatedPlatformController2D : MonoBehaviour {
         }
     }
 
-        void Flip() {
-            facingRight = !facingRight;
+    void Flip() {
+        facingRight = !facingRight;
 
-            Vector3 theScale = transform.localScale;
-            theScale.x *= -1;
-            transform.localScale = theScale;
-        }
-
-        void StopPlayer() {
-            gamestarted = false;
-            print("Ouch! The player has faceplanted.");
-
-            if (transform.localScale.x < 0) Flip();
-            if (ouch != null) ouch.Play();
-            StartCoroutine("waitForRestart");
-        }
-
-        void EndPlay() {
-            gamestarted = false;
-            StartCoroutine("waitForRestart");      
-        }
-
-        IEnumerator waitForRestart() {
-            yield return new WaitForSeconds(timeToRestart);
-            Application.LoadLevel(0);
-        }
-
+        Vector3 theScale = transform.localScale;
+        theScale.x *= -1;
+        transform.localScale = theScale;
     }
+
+    void StopPlayer() {
+        gamestarted = false;
+        print("Ouch! The player has faceplanted.");
+
+        if (transform.localScale.x < 0) Flip();
+        if (ouch != null) ouch.Play();
+        StartCoroutine("waitForRestart");
+    }
+
+    void EndPlay() {
+        gamestarted = false;
+        StartCoroutine("waitForRestart");      
+    }
+
+    IEnumerator waitForRestart() {
+        yield return new WaitForSeconds(timeToRestart);
+        Application.LoadLevel(0);
+    }
+
+}

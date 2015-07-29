@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class CharacterController2D : MonoBehaviour {
+public class PlatformController2D : MonoBehaviour {
 
     private bool facingRight = true;
     private bool jump = false;

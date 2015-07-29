@@ -52,25 +52,19 @@ public class PlatformController2D : MonoBehaviour {
 
     // FixedUpdate is called much more quickly than Update, and is appropriate for realtime physics calculations.
     void FixedUpdate() {
-        if (jump == true) {
+        if (jump) {
             if (Mathf.Abs(rigidbody2D.velocity.y) < maxJump)
             rigidbody2D.AddForce(new Vector2(0f, jumpForce));
-
-            if (Mathf.Abs(rigidbody2D.velocity.y) >= maxJump)
-            rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, maxJump);
             jump = false;
         }
 
         float h = Input.GetAxis("Horizontal");
+        float speed = Mathf.Abs(rigidbody2D.velocity.x);
 
-        if (h * rigidbody2D.velocity.x < maxRunSpeed) {
-            if (changeDirectionsMidJump || grounded) {
-                rigidbody2D.AddForce(Vector2.right * h * runForce);
-            }
-        }
-
-        if (Mathf.Abs(rigidbody2D.velocity.x) > maxRunSpeed) {
-            rigidbody2D.velocity = new Vector2(Mathf.Sign(rigidbody2D.velocity.x) * maxRunSpeed, rigidbody2D.velocity.y);
+        if (speed < maxRunSpeed) {
+            float asymptoticForce = runForce * (1 - speed/maxRunSpeed);
+            if (changeDirectionsMidJump || grounded)
+                rigidbody2D.AddForce(Vector2.right * h * asymptoticForce);
         }
         currentRunSpeed = rigidbody2D.velocity.x;
 

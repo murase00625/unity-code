@@ -7,7 +7,7 @@ public class AnimatedPlatformController2D : MonoBehaviour {
 	public bool gamestarted = false;
 
     // Flip this to true when the animation state machine is ready
-    private bool animated = false;
+	private bool animated = false;
 
     private Transform groundCheckLeft, groundCheckRight;
     public bool grounded = false;
@@ -55,60 +55,60 @@ public class AnimatedPlatformController2D : MonoBehaviour {
 			float h = Input.GetAxis("Horizontal");
 
 			if (animated) anim.SetFloat("Speed", Mathf.Abs(h));
-				float speed = Mathf.Abs(rigidbody2D.velocity.x);
+			float speed = Mathf.Abs(rigidbody2D.velocity.x);
 
 			if (speed < maxRunSpeed) {
 				float asymptoticForce = runForce * (1 - speed/maxRunSpeed);
 				if (changeDirectionsMidJump || grounded)
-					rigidbody2D.AddForce(Vector2.right * h * asymptoticForce);
-			} else {
+				rigidbody2D.AddForce(Vector2.right * h * asymptoticForce);
+				} else {
 
-			}
+				}
 
-			if (isJumping) {
-				if (animated) anim.SetTrigger("Jump");
+				if (isJumping) {
+					if (animated) anim.SetTrigger("Jump");
 
-				rigidbody2D.AddForce(new Vector2(0f, jumpForce));
-				isJumping = false;
-			}
+					rigidbody2D.AddForce(new Vector2(0f, jumpForce));
+					isJumping = false;
+				}
 
-			if (animated) {
-				AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
+				if (animated) {
+					AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
 
-				if (stateInfo.IsName("Base Layer.jump")) {
-					if (grounded) {
-						anim.SetTrigger("Touchground");
+					if (stateInfo.IsName("Base Layer.jump")) {
+						if (grounded) {
+							anim.SetTrigger("Touchground");
+						}
 					}
 				}
 			}
 		}
+
+		void Flip() {
+			facingRight = !facingRight;
+
+			Vector3 theScale = transform.localScale;
+			theScale.x *= -1;
+			transform.localScale = theScale;
+		}
+
+		void StopPlayer() {
+			gamestarted = false;
+			print("Ouch! The player has faceplanted.");
+
+			if (transform.localScale.x < 0) Flip();
+			if (ouch != null) ouch.Play();
+			StartCoroutine("waitForRestart");
+		}
+
+		void EndPlay() {
+			gamestarted = false;
+			StartCoroutine("waitForRestart");      
+		}
+
+		IEnumerator waitForRestart() {
+			yield return new WaitForSeconds(timeToRestart);
+			Application.LoadLevel(0);
+		}
+
 	}
-
-	void Flip() {
-		facingRight = !facingRight;
-
-		Vector3 theScale = transform.localScale;
-		theScale.x *= -1;
-		transform.localScale = theScale;
-	}
-
-	void StopPlayer() {
-		gamestarted = false;
-		print("Ouch! The player has faceplanted.");
-
-		if (transform.localScale.x < 0) Flip();
-		if (ouch != null) ouch.Play();
-		StartCoroutine("waitForRestart");
-	}
-
-	void EndPlay() {
-		gamestarted = false;
-		StartCoroutine("waitForRestart");      
-	}
-
-	IEnumerator waitForRestart() {
-		yield return new WaitForSeconds(timeToRestart);
-		Application.LoadLevel(0);
-	}
-
-}

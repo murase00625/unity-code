@@ -44,7 +44,7 @@ public class PlatformCameraFollow : MonoBehaviour {
         if (targetX > minX && targetX < maxX) {
             curPosition.x = targetX;
         } else {
-                curPosition.x = Mathf.Clamp(curPosition.x, minX, maxX);
+            curPosition.x = Mathf.Clamp(curPosition.x, minX, maxX);
         }
         if (targetY > minY && targetY < maxY) {
             curPosition.y = targetY;

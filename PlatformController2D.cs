@@ -20,6 +20,7 @@ public class CharacterController2D : MonoBehaviour {
         // Use this for initialization
         void Start () {
                 gamestarted = true;
+                // ouch.Stop();
         }
        
         // Update is called once per frame, and is appropriate for things that don't require a ton of precision.

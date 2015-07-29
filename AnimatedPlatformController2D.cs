@@ -4,6 +4,7 @@ using System.Collections;
 public class AnimatedPlatformController2D : MonoBehaviour {
 	private bool facingRight = true;
 	private bool isJumping = false;
+	private bool gamestarted = false;
 	
 	// Flip this to true when the animation state machine is ready
 	private bool animated = false;
@@ -15,9 +16,12 @@ public class AnimatedPlatformController2D : MonoBehaviour {
 	public float runForce = 350f;
 	public float jumpForce = 500f;
 	public float maxRunSpeed = 5f;
+	public float timeToRestart = 3f;
+	public bool changeDirectionsMidJump = false;
 	public ParticleSystem ouch;
 
 	void Awake() {
+		gamestarted = true;
 		groundCheck = transform.Find("groundCheck");
 		if (animated) anim = GetComponent<Animator>();
 		// ouch.Stop();
@@ -27,41 +31,50 @@ public class AnimatedPlatformController2D : MonoBehaviour {
 	// and an empty object at the character's "feet" called "groundCheck".
 	// This is an object layer in Unity, NOT a sprite sorting layer!
 	void Update() {
-		float h = Input.GetAxis("Horizontal");
+		if (gamestarted) {
+			float h = Input.GetAxis("Horizontal");
 
-		if ((h > 0 && !facingRight) || (h < 0 && facingRight)) {
-			Flip();
-		}
+			if ((h > 0 && !facingRight) || (h < 0 && facingRight)) {
+				Flip();
+			}
 
-		grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Jumpable"));
+			grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Jumpable"));
 
-		if (Input.GetButtonDown("Jump") && grounded) {
-			isJumping = true;
+			if (Input.GetButtonDown("Jump") && grounded) {
+				isJumping = true;
+			}
 		}
 	}
 
 	void FixedUpdate() {
-		float h = Input.GetAxis("Horizontal");
+		if (gamestarted) {
+			float h = Input.GetAxis("Horizontal");
 
-		if (animated) anim.SetFloat("Speed", Mathf.Abs(h));
+			if (animated) anim.SetFloat("Speed", Mathf.Abs(h));
 
-		if (h * rigidbody2D.velocity.x < maxRunSpeed) {
-			rigidbody2D.AddForce(Vector2.right * h * runForce);
-		}
+			if (h * rigidbody2D.velocity.x < maxRunSpeed) {
+				if (changeDirectionsMidJump || grounded)
+				rigidbody2D.AddForce(Vector2.right * h * runForce);
+			}
 
-		if (isJumping) {
-			if (animated) anim.SetTrigger("Jump");
+			if (h * rigidbody2D.velocity.x > maxRunSpeed) {
+				rigidbody2D.velocity = new Vector2(Mathf.Sign(rigidbody2D.velocity.x) * maxRunSpeed, rigidbody2D.velocity.y);
+			}
 
-			rigidbody2D.AddForce(new Vector2(0f, jumpForce));
-			isJumping = false;
-		}
+			if (isJumping) {
+				if (animated) anim.SetTrigger("Jump");
 
-		if (animated) {
-			AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
+				rigidbody2D.AddForce(new Vector2(0f, jumpForce));
+				isJumping = false;
+			}
 
-			if (stateInfo.IsName("Base Layer.jump")) {
-				if (grounded) {
-					anim.SetTrigger("Touchground");
+			if (animated) {
+				AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
+
+				if (stateInfo.IsName("Base Layer.jump")) {
+					if (grounded) {
+						anim.SetTrigger("Touchground");
+					}
 				}
 			}
 		}
@@ -90,7 +103,7 @@ public class AnimatedPlatformController2D : MonoBehaviour {
     }
 
     IEnumerator waitForRestart() {
-    	yield return new WaitForSeconds(5);
+    	yield return new WaitForSeconds(timeToRestart);
     	Application.LoadLevel(0);
     }
 

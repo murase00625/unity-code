@@ -11,7 +11,7 @@ Moving platform support planned for later release.
 - Import the scripts to your project
 - Player character:
 -- Set the tag to "Player"
--- Create an object layer called Jumpable (Edit > Project Settings > Tags and Layers). Don't use sorting layers for this!
+-- Create a layer called Jumpable (Edit > Project Settings > Tags and Layers). Don't use sorting layers for this!
 -- Assign all platforms, ground objects, and anything where jumping is desired to the Jumpable layer (top of the Inspector).
 -- Add a controller script
 

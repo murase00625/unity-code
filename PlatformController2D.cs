@@ -7,6 +7,7 @@ public class PlatformController2D : MonoBehaviour {
     private bool jump = false;
     private bool grounded = false;
     private bool gamestarted = false;
+    private Transform groundCheckLeft, groundCheckRight;
 
     public float timeToRestart = 3f;
     public float currentRunSpeed = 0f;

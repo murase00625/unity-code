@@ -32,35 +32,35 @@ public class AnimatedPlatformController2D : MonoBehaviour {
 	// Jumping requires all platforms and "jumpable" objects to be in a layer called Jumpable,
 	// and two empty objects at the character's "feet" called "groundCheckLeft" and "groundCheckRight".
 	// Jumpable must be an object layer in Unity, NOT a sprite sorting layer!
-void Update() {
-	currentRunSpeed = Mathf.Abs(rigidbody2D.velocity.x);
-	if (gamestarted) {
-		float h = Input.GetAxis("Horizontal");
+	void Update() {
+		currentRunSpeed = Mathf.Abs(rigidbody2D.velocity.x);
+		if (gamestarted) {
+			float h = Input.GetAxis("Horizontal");
 
-		if ((h > 0 && !facingRight) || (h < 0 && facingRight)) {
-			Flip();
-		}
-		RaycastHit2D hitLeft = Physics2D.Raycast(groundCheckLeft.position, -Vector2.up, 0.1f, 1 << LayerMask.NameToLayer("Jumpable"));
-		RaycastHit2D hitRight = Physics2D.Raycast(groundCheckRight.position, -Vector2.up, 0.1f, 1 << LayerMask.NameToLayer("Jumpable"));
-		grounded = hitLeft.collider != null || hitRight.collider != null;
+			if ((h > 0 && !facingRight) || (h < 0 && facingRight)) {
+				Flip();
+			}
+			RaycastHit2D hitLeft = Physics2D.Raycast(groundCheckLeft.position, -Vector2.up, 0.1f, 1 << LayerMask.NameToLayer("Jumpable"));
+			RaycastHit2D hitRight = Physics2D.Raycast(groundCheckRight.position, -Vector2.up, 0.1f, 1 << LayerMask.NameToLayer("Jumpable"));
+			grounded = hitLeft.collider != null || hitRight.collider != null;
 
-		if (Input.GetButtonDown("Jump") && grounded) {
-			isJumping = true;
+			if (Input.GetButtonDown("Jump") && grounded) {
+				isJumping = true;
+			}
 		}
 	}
-}
 
-void FixedUpdate() {
-	if (gamestarted) {
-		float h = Input.GetAxis("Horizontal");
+	void FixedUpdate() {
+		if (gamestarted) {
+			float h = Input.GetAxis("Horizontal");
 
-		if (animated) anim.SetFloat("Speed", Mathf.Abs(h));
-		float speed = Mathf.Abs(rigidbody2D.velocity.x);
+			if (animated) anim.SetFloat("Speed", Mathf.Abs(h));
+				float speed = Mathf.Abs(rigidbody2D.velocity.x);
 
-		if (speed < maxRunSpeed) {
-			float asymptoticForce = runForce * (1 - speed/maxRunSpeed);
-			if (changeDirectionsMidJump || grounded)
-			rigidbody2D.AddForce(Vector2.right * h * asymptoticForce);
+			if (speed < maxRunSpeed) {
+				float asymptoticForce = runForce * (1 - speed/maxRunSpeed);
+				if (changeDirectionsMidJump || grounded)
+					rigidbody2D.AddForce(Vector2.right * h * asymptoticForce);
 			} else {
 
 			}

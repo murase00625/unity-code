@@ -14,7 +14,7 @@ public class CharacterController2D : MonoBehaviour {
         public float maxJump = 2f;
         public float maxRunSpeed = 5f;
         public ParticleSystem ouch;
-        // Super Mario style jumping: Toggle this to true
+        // Super Mario style jumping: Toggle this to true to allow redirection mid-jump.
         public bool changeDirectionsMidJump = false;
  
         // Use this for initialization

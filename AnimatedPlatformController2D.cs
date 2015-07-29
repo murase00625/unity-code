@@ -60,29 +60,27 @@ public class AnimatedPlatformController2D : MonoBehaviour {
             if (speed < maxRunSpeed) {
                 float asymptoticForce = runForce * (1 - speed/maxRunSpeed);
                 if (changeDirectionsMidJump || grounded)
-                rigidbody2D.AddForce(Vector2.right * h * asymptoticForce);
-                } else {
+                	rigidbody2D.AddForce(Vector2.right * h * asymptoticForce);
+            }
 
-                }
+            if (isJumping) {
+                if (animated) anim.SetTrigger("Jump");
 
-                if (isJumping) {
-                    if (animated) anim.SetTrigger("Jump");
+                rigidbody2D.AddForce(new Vector2(0f, jumpForce));
+                isJumping = false;
+            }
 
-                    rigidbody2D.AddForce(new Vector2(0f, jumpForce));
-                    isJumping = false;
-                }
+            if (animated) {
+                AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
 
-                if (animated) {
-                    AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
-
-                    if (stateInfo.IsName("Base Layer.jump")) {
-                        if (grounded) {
-                            anim.SetTrigger("Touchground");
-                        }
+                if (stateInfo.IsName("Base Layer.jump")) {
+                    if (grounded) {
+                        anim.SetTrigger("Touchground");
                     }
                 }
             }
         }
+    }
 
         void Flip() {
             facingRight = !facingRight;

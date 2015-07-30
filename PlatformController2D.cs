@@ -13,7 +13,6 @@ public class PlatformController2D : MonoBehaviour {
     public float currentRunSpeed = 0f;
     public float jumpForce = 500f;
     public float runForce = 350f;
-    public float maxJump = 2f;
     public float maxRunSpeed = 5f;
     public ParticleSystem ouch;
     // Super Mario style jumping: Toggle this to true to allow redirection mid-jump.
@@ -56,7 +55,6 @@ public class PlatformController2D : MonoBehaviour {
     void FixedUpdate() {
         if (gamestarted) {
             if (jump) {
-                if (Mathf.Abs(rigidbody2D.velocity.y) < maxJump)
                 rigidbody2D.AddForce(new Vector2(0f, jumpForce));
                 jump = false;
             }
@@ -80,11 +78,15 @@ public class PlatformController2D : MonoBehaviour {
         transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
     }
 
+    void ToggleFreeze() {
+        gamestarted = !gamestarted;
+    }
+
     void StopPlayer() {
         gamestarted = false;
         print("Ouch! The player has faceplanted.");
 
-        if (dt != null) dt.setContent("scoreboard", "You lose a life!");
+        if (dt != null) dt.setContent("scoreboard", "You lost! Restarting game in " + timeToRestart + " seconds.");
         if (transform.localScale.x < 0) Flip();
 
         if (ouch != null) ouch.Play();

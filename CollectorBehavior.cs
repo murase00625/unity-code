@@ -9,6 +9,6 @@ public class CollectorBehavior : MonoBehaviour {
 	void collect() {
 		score++;
 		print("Score: " + score);
-		dt.setContent("scoreboard", "Score: " + score);
+		if (dt != null) dt.setContent("scoreboard", "Score: " + score);
 	}
 }

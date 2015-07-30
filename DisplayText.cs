@@ -27,6 +27,10 @@ public class DisplayText : MonoBehaviour {
 	public void setContent(string key, string s) {
 		if (key == respondsTo) content = s;
 	}
+
+	public void setContentAsArray(object[] args) {
+		if ((string)args[0] == respondsTo) content = (string) args[1];
+	}
 	
 	void OnGUI() {
 		obj.guiText.text = content;

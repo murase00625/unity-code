@@ -1,4 +1,4 @@
-# Basic Unity 4.x 2D game scripts
+# Basic Unity 4.4 2D game scripts
 
 This is a collection of Unity 4 scripts for 2D games.
 

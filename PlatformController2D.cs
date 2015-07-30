@@ -84,8 +84,7 @@ public class PlatformController2D : MonoBehaviour {
         gamestarted = false;
         print("Ouch! The player has faceplanted.");
 
-        dt.setContent("scoreboard", "The monster got you!");
-
+        if (dt != null) dt.setContent("scoreboard", "The monster got you!");
         if (transform.localScale.x < 0) Flip();
 
         if (ouch != null) ouch.Play();

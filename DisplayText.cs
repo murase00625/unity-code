@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class DisplayText : MonoBehaviour {
@@ -29,7 +29,6 @@ public class DisplayText : MonoBehaviour {
 	}
 	
 	void OnGUI() {
-		// GUI.Label(new Rect(x, y, width, height), content);
 		obj.guiText.text = content;
 	}
 

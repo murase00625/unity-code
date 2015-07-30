@@ -4,13 +4,13 @@ using System.Collections;
 public class AnimatedPlatformController2D : MonoBehaviour {
     private bool facingRight = true;
     private bool isJumping = false;
-    public bool gamestarted = false;
+    private bool gamestarted = false;
 
     // Flip this to true when the animation state machine is ready
     private bool animated = false;
 
     private Transform groundCheckLeft, groundCheckRight;
-    public bool grounded = false;
+    private bool grounded = false;
     private Animator anim;
 
     public float runForce = 350f;

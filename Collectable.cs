@@ -3,13 +3,12 @@ using System.Collections;
 
 public class Collectable : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	
+	void OnTriggerEnter2D(Collider2D collider) {
+		GameObject obj = collider.gameObject;
+		if (obj.tag == "Player") {
+			obj.SendMessage("collect");
+			Destroy(this.gameObject);
+		}
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
 }

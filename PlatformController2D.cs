@@ -19,6 +19,8 @@ public class PlatformController2D : MonoBehaviour {
     // Super Mario style jumping: Toggle this to true to allow redirection mid-jump.
     public bool changeDirectionsMidJump = false;
 
+    public DisplayText dt;
+
     // Use this for initialization
     void Start () {
         gamestarted = true;
@@ -81,6 +83,8 @@ public class PlatformController2D : MonoBehaviour {
     void StopPlayer() {
         gamestarted = false;
         print("Ouch! The player has faceplanted.");
+
+        dt.setContent("scoreboard", "The monster got you!");
 
         if (transform.localScale.x < 0) Flip();
 

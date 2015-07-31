@@ -74,33 +74,11 @@ public class PlatformController2D : MonoBehaviour {
 
     void Flip() {
         facingRight = !facingRight;
-
         transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
     }
 
     void ToggleFreeze() {
         gamestarted = !gamestarted;
-    }
-
-    void StopPlayer() {
-        gamestarted = false;
-        print("Ouch! The player has faceplanted.");
-
-        if (dt != null) dt.setContent("scoreboard", "You lost! Restarting game in " + timeToRestart + " seconds.");
-        if (transform.localScale.x < 0) Flip();
-
-        if (ouch != null) ouch.Play();
-        StartCoroutine("waitForRestart");
-    }
-
-    void EndPlay() {
-        gamestarted = false;
-        StartCoroutine("waitForRestart");      
-    }
-
-    IEnumerator waitForRestart() {
-        yield return new WaitForSeconds(timeToRestart);
-        Application.LoadLevel(0);
     }
 
 }

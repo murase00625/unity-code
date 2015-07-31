@@ -18,7 +18,7 @@ public class LifeManager : MonoBehaviour {
 
 	void Start() {
 		string content = generateContent(initialLives, initialHitPoints);
-		updateContent(content);
+		updateContent(content, responseTag);
 		lives = initialLives;
 		hitPoints = initialHitPoints;
 		if (ouch != null) ouch.Stop();
@@ -30,7 +30,7 @@ public class LifeManager : MonoBehaviour {
 		return content;
 	}
 
-	void updateContent(string content) {
+	void updateContent(string content, string tag) {
 		object[] args = new object[2];
 		args[0] = responseTag;
 		args[1] = content;
@@ -51,23 +51,29 @@ public class LifeManager : MonoBehaviour {
 			}
 		}
 		string content = generateContent(lives, hitPoints);
-		updateContent(content);
+		updateContent(content, responseTag);
 	}
 
 	IEnumerator waitForRespawn() {
+		if (player.transform.localScale.x < 0) player.SendMessage("Flip");
         player.SendMessage("ToggleFreeze");
+
+
         if (ouch != null) ouch.Play();
 		yield return new WaitForSeconds(respawnCooldown);
+		if (ouch != null) {
+			ouch.Stop();
+			ouch.Clear();
+		}
         Vector3 playerPosition = spawnPoint.transform.position;
 		player.transform.position = playerPosition;
-		if (ouch != null) ouch.Stop();
 		player.SendMessage("ToggleFreeze");
     }
 
     void StopPlayer() {
         player.SendMessage("ToggleFreeze");
         string message = "You lost! Waiting " + timeToRestart + " seconds to restart.";
-        updateContent(message);
+        updateContent(message, "scoreboard");
 		if (player.transform.localScale.x < 0) player.SendMessage("Flip");
 
         if (ouch != null) ouch.Play();

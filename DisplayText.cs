@@ -10,7 +10,7 @@ public class DisplayText : MonoBehaviour {
 	public Font font;
 	public int size;
 	public bool show;
-	public Color color;
+	public Color color = new Color(1f, 1f, 1f, 1f);
 
 	private GameObject obj;
 

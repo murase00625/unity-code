@@ -13,6 +13,7 @@ public class LifeManager : MonoBehaviour {
 	public int timeToRestart;
 	public ParticleSystem ouch;
 
+	private bool losingLife = false;
 	private int lives;
 	private int hitPoints;
 
@@ -32,7 +33,7 @@ public class LifeManager : MonoBehaviour {
 
 	void updateContent(string content, string tag) {
 		object[] args = new object[2];
-		args[0] = responseTag;
+		args[0] = tag;
 		args[1] = content;
 		player.SendMessage("setContentAsArray", args);
 	}
@@ -43,8 +44,9 @@ public class LifeManager : MonoBehaviour {
 			hitPoints = 0;
 			if (lives <= 0) {
 				player.SendMessage("StopPlayer");
-			} else {
+			} else if (!losingLife) {
 				lives--;
+				losingLife = true;
 				hitPoints = initialHitPoints;
 				StartCoroutine("waitForRespawn");
 				
@@ -57,7 +59,7 @@ public class LifeManager : MonoBehaviour {
 	IEnumerator waitForRespawn() {
 		if (player.transform.localScale.x < 0) player.SendMessage("Flip");
         player.SendMessage("ToggleFreeze");
-
+        player.rigidbody2D.velocity = new Vector2(0f, player.rigidbody2D.velocity.y);
 
         if (ouch != null) ouch.Play();
 		yield return new WaitForSeconds(respawnCooldown);
@@ -67,6 +69,7 @@ public class LifeManager : MonoBehaviour {
 		}
         Vector3 playerPosition = spawnPoint.transform.position;
 		player.transform.position = playerPosition;
+		losingLife = false;
 		player.SendMessage("ToggleFreeze");
     }
 

@@ -8,7 +8,12 @@ public class CollectorBehavior : MonoBehaviour {
 
 	void collect() {
 		score++;
-		print("Score: " + score);
+		// print("Score: " + score);
 		if (dt != null) dt.setContent("scoreboard", "Score: " + score);
+		this.SendMessage("checkConditions");
+	}
+
+	public int getScore() {
+		return score;
 	}
 }

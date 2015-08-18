@@ -17,6 +17,7 @@ Moving platform support planned for later release.
 
 ## Coming soon
 - Top-down controller
+- Moving platform that also moves the player (Unity doesn't do this by default)
 
 ## License
 

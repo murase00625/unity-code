@@ -39,31 +39,42 @@ public class LifeManager : MonoBehaviour {
 	}
 
 	void inflictDamage(int x) {
-		hitPoints -= x;
-		if (hitPoints <= 0) {
-			hitPoints = 0;
-			if (lives <= 0) {
-				player.SendMessage("StopPlayer");
-			} else if (!losingLife) {
-				lives--;
-				losingLife = true;
-				hitPoints = initialHitPoints;
-				StartCoroutine("waitForRespawn");
-				
+		
+		if (!losingLife) {
+			hitPoints -= x;
+			if (hitPoints <= 0) {
+				hitPoints = 0;
+				if (lives <= 0) {
+					player.SendMessage("StopPlayer");
+				} else {
+					losingLife = true;
+					StartCoroutine("waitForRespawn");		
+				}
 			}
 		}
 		string content = generateContent(lives, hitPoints);
 		updateContent(content, responseTag);
 	}
 
+	void heal(int x) {
+		hitPoints += x;
+		string content = generateContent(lives, hitPoints);
+		updateContent(content, responseTag);
+	}
+
 	IEnumerator waitForRespawn() {
+		if (ouch != null) ouch.Play();
 		if (player.transform.localScale.x < 0) player.SendMessage("Flip");
         player.SendMessage("ToggleFreeze");
         player.rigidbody2D.velocity = new Vector2(0f, player.rigidbody2D.velocity.y);
 
-        if (ouch != null) ouch.Play();
 		yield return new WaitForSeconds(respawnCooldown);
-		if (ouch != null) {
+		lives--;
+		hitPoints = initialHitPoints;
+		string content = generateContent(lives, hitPoints);
+		updateContent(content, responseTag);
+					
+        if (ouch != null) {
 			ouch.Stop();
 			ouch.Clear();
 		}
@@ -76,7 +87,7 @@ public class LifeManager : MonoBehaviour {
     void StopPlayer() {
         player.SendMessage("ToggleFreeze");
         string message = "You lost! Waiting " + timeToRestart + " seconds to restart.";
-        updateContent(message, "scoreboard");
+        updateContent(message, responseTag);
 		if (player.transform.localScale.x < 0) player.SendMessage("Flip");
 
         if (ouch != null) ouch.Play();

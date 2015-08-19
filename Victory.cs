@@ -4,14 +4,19 @@ using System.Collections;
 public class Victory : MonoBehaviour {
 
 	public GameObject player;
+	public ParticleSystem happy;
 	public string message;
 	public string messageTag;
 	public int timeToNextLevel = 5;
 	public int nextLevel = 0;
+	public int targetScore = 10;
 	CollectorBehavior cb;
 
 	void Start() {
 		cb = GetComponent<CollectorBehavior>();
+		if (happy != null) {
+			happy.Stop();
+		}
 	}
 
 	void onVictory() {
@@ -20,6 +25,9 @@ public class Victory : MonoBehaviour {
 		obj[1] = message;
 		player.SendMessage("setContentAsArray", obj);
 		player.SendMessage("ToggleFreeze");
+		if (happy != null) {
+			happy.Play();
+		}
 		StartCoroutine("waitForNextLevel", nextLevel);
 	}
 
@@ -30,7 +38,7 @@ public class Victory : MonoBehaviour {
 
 	void checkConditions() {
 		// TODO: set up victory conditions!
-		if (cb.getScore() == 10) {
+		if (cb.getScore() == targetScore) {
 			onVictory();
 		}
 	}

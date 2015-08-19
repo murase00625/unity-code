@@ -81,4 +81,10 @@ public class PlatformController2D : MonoBehaviour {
         gamestarted = !gamestarted;
     }
 
+    void OnCollisionEnter2D(Collision2D coll) {
+        if (coll.transform.tag == "mover") {
+
+        }
+    }
+
 }
